@@ -4,6 +4,7 @@
     "": {
       "name": "hackclub-merch",
       "devDependencies": {
+        "@types/bun": "^1.3.1",
         "prettier": "^3.6.2",
         "turbo": "^2.5.8",
         "typescript": "5.9.2",
@@ -34,6 +35,18 @@
         "tailwindcss": "^4",
         "tsx": "^4.20.5",
         "tw-animate-css": "^1.3.8",
+        "typescript": "^5",
+      },
+    },
+    "packages/drizzle": {
+      "name": "@merch/drizzle",
+      "dependencies": {
+        "@merch/types": "*",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
         "typescript": "^5",
       },
     },
@@ -196,6 +209,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@merch/drizzle": ["@merch/drizzle@workspace:packages/drizzle"],
 
     "@merch/slack": ["@merch/slack@workspace:packages/slack"],
 

@@ -1,0 +1,4 @@
+{
+	"include": ["./reference.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+	"exclude": ["**/node_modules"]
+}
