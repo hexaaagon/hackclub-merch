@@ -1,0 +1,31 @@
+{
+  "name": "@merch/config",
+  "module": "index.ts",
+  "main": "index.ts",
+  "types": "index.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./*": {
+      "types": [
+        "./*.ts",
+        "./*/index.d.ts",
+        "./*/index.ts"
+      ],
+      "default": [
+        "./*.ts",
+        "./*/index.d.ts",
+        "./*/index.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "@merch/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
