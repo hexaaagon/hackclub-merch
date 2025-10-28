@@ -1,3 +1,6 @@
-console.log("Hello via Bun!");
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
-export const hello = "world";
+console.log(process.env);
+export const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle({ client: sql });

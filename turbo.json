@@ -17,6 +17,48 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+
+    "postinstall": {
+      "cache": false
+    },
+
+    "db:generate": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:generate:auth": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:generate:migrations": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:migrate": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:drop": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:pull": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:push": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "db:studio": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false,
+      "persistent": true
+    },
+    "db:check": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
     }
   }
 }

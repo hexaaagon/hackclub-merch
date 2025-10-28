@@ -1,5 +1,5 @@
 {
-  "name": "@merch/slack",
+  "name": "@merch/auth",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -13,7 +13,9 @@
     }
   },
   "dependencies": {
-    "@merch/types": "workspace:*"
+    "@merch/drizzle": "workspace:*",
+    "@merch/types": "workspace:*",
+    "better-auth": "^1.3.32"
   },
   "devDependencies": {
     "@types/bun": "latest"
