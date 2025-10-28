@@ -10,7 +10,7 @@ const runMigrate = async () => {
   const start = Date.now();
 
   // Database Migrations
-  await migrate(db, { migrationsFolder: "src/lib/db/migrations" });
+  await migrate(db, { migrationsFolder: "src/migrations" });
 
   const end = Date.now();
 
