@@ -13,6 +13,31 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: "/shop",
+        destination: "/error-pages/page-unavailable",
+      },
+      {
+        source: "/about",
+        destination: "/error-pages/page-unavailable",
+      },
+      {
+        source: "/search",
+        destination: "/error-pages/page-unavailable",
+      },
+      {
+        source: "/carts",
+        destination: "/error-pages/page-unavailable",
+      },
+
+      {
+        source: "/user",
+        destination: "/error-pages/page-unavailable",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

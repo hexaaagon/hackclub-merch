@@ -4,6 +4,7 @@ export default function NotFound() {
   return (
     <main className="flex flex-col items-center justify-center">
       <p>??? - page unavailable.</p>
+      <p>this page is still at development. check back later.</p>
       <Link
         className="font-mono text-sky-700 transition-all hover:underline sm:text-sm dark:text-sky-600"
         href="/"

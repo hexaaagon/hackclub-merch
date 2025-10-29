@@ -43,18 +43,18 @@ export default function Navbar() {
             </div>
           </Link>
           <div className="hidden items-center space-x-8 font-mono text-muted-foreground text-sm uppercase *:tracking-widest *:hover:underline sm:flex">
-            <Link href="#">Shop</Link>
-            <Link href="#">About</Link>
+            <Link href="/shop">Shop</Link>
+            <Link href="/about">About</Link>
           </div>
         </div>
         <div className="flex items-center space-x-8">
-          <Link href="#">
+          <Link href="/search">
             <Search className="size-6 hover:opacity-80" />
           </Link>
-          <Link href="#">
+          <Link href="/carts">
             <ShoppingCart className="size-6 hover:opacity-80" />
           </Link>
-          <Link href="#">
+          <Link href="/user">
             <User2 className="size-6 hover:opacity-80" />
           </Link>
         </div>
