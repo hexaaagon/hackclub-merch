@@ -1,63 +1,65 @@
-import Image from "next/image";
-import { BackgroundPattern } from "@/components/ui/background-pattern";
+import { Button, buttonVariants } from "@/components/ui/button";
+import PicsumImage from "@/components/ui/picsum";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex h-full min-h-screen w-screen flex-col items-center justify-center bg-[#171513] bg-gradient-to-br from-neutral-600/0 via-neutral-600/20 to-black p-8 lg:p-40">
-      <BackgroundPattern />
-
-      <div className="relative z-10 flex flex-col items-center gap-6">
-        <div className="flex flex-col items-center gap-1">
-          <div className="flex items-center gap-4">
-            <Image
-              src="/static/vector/loafy.svg"
-              alt="Loafy Logo"
-              width={31}
-              height={24}
-              className="text-white"
-            />
-            <div className="h-4 w-px bg-white"></div>
-            <h1 className="font-grotesque font-normal text-2xl text-white">
-              Loafy
-            </h1>
-          </div>
-          <p className="font-mono text-base text-white">
-            next.js template - v1.0.0
+    <main>
+      <section className="mt-16 flex flex-col items-center justify-center pt-24 pb-32 text-center">
+        <Link
+          href="https://forms.fillout.com/t/5k2dwE9Lxpus"
+          className={cn(
+            buttonVariants({
+              variant: "outline",
+              size: "sm",
+            }),
+            "mb-4 rounded-full",
+          )}
+          target="_blank"
+          rel="noreferrer"
+        >
+          🎉 <Separator className="mx-2 h-4" orientation="vertical" />
+          Introducing Merch YSWS
+          <ChevronRight className="ml-1 size-4 text-muted-foreground" />
+        </Link>
+        <h1 className="font-phantom font-semibold text-7xl">Ship to Shop.</h1>
+        <p className="mt-6 max-w-2xl font-medium text-muted-foreground text-xl">
+          Hack Club Merch is here. Build your own projects, get cool swags.
+          Browse limited-edition tees, stickers, and accessories designed by the
+          community, customize pieces for your club or event, and wear what you
+          ship.
+        </p>
+        <Button className="mt-8 font-inter" size="lg" asChild>
+          <Link
+            href="https://forms.fillout.com/t/5k2dwE9Lxpus"
+            target="_blank"
+            rel="noreferrer"
+          >
+            RSVP Now <ChevronRight />
+          </Link>
+        </Button>
+      </section>
+      <section className="space-y-8">
+        <header>
+          <h2 className="text-center font-phantom font-semibold text-5xl">
+            Featured Merch
+          </h2>
+          <p className="mt-2 text-center text-muted-foreground text-xl">
+            Explore our curated selection of exclusive Hack Club merchandise.
           </p>
-        </div>
-
-        {/* Main content card */}
-        <div className="relative flex w-full max-w-4xl flex-col items-center gap-10 rounded-3xl border border-[#29241F] bg-[#0C0A09] bg-gradient-to-br from-white/0 via-white/5 to-black p-16">
-          {/* Background pattern for card */}
-          <div
-            className="absolute inset-0 rounded-3xl bg-repeat opacity-20"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm-30 0c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: "203% 203%",
-              backgroundPosition: "center center",
-            }}
-          ></div>
-
-          <div className="relative z-10 flex flex-col items-center gap-10">
-            <p className="text-center font-mono text-2xl text-white">
-              Get started by editing{" "}
-              <span className="text-blue-700">src/app/page.tsx</span>
-            </p>
-
-            {/* Bauhaus design */}
-            <div className="relative">
-              <Image
-                src="/static/vector/bauhaus.svg"
-                alt="Bauhaus Design"
-                width={500}
-                height={200}
-                className="h-auto max-w-full"
-                priority
-              />
-            </div>
+        </header>
+        <div className="mx-auto mb-16 flex justify-center px-4">
+          <div className="grid grid-cols-4 space-x-5 overflow-hidden">
+            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
+            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
+            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
+            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

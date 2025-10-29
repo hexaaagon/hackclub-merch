@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
+@custom-variant dark (&:not(*));
 
 @theme inline {
   --color-background: var(--background);
@@ -41,8 +42,9 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* font here */
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-phantom);
   --font-mono: var(--font-geist-mono);
+  --font-inter: var(--font-inter);
   --font-dm-sans: var(--font-dm-sans);
   --font-grotesque: var(--font-grotesque);
 }
@@ -83,6 +85,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Not planning to implement dark mode for now
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -116,6 +119,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+*/
 
 @layer base {
   * {
@@ -123,5 +127,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .navbar-container {
+    @apply max-w-512 w-full;
+  }
+  .lucide {
+    @apply stroke-[1.4px];
   }
 }
