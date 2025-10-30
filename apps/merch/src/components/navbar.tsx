@@ -11,7 +11,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="w-full px-6 md:py-8">
+    <header className="w-full p-6 md:py-8">
       <div className="navbar-container mx-auto flex w-full items-center justify-between px-8 transition-[padding] sm:px-12 md:px-18">
         <div className="flex items-center space-x-12">
           <Link

@@ -9,6 +9,7 @@ export function ReactScan(): JSX.Element {
   useEffect(() => {
     scan({
       enabled: true,
+      dangerouslyForceRunInProduction: true,
     });
   }, []);
 

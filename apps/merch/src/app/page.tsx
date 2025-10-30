@@ -25,12 +25,16 @@ export default function HomePage() {
           Introducing Merch YSWS
           <ChevronRight className="ml-1 size-4 text-muted-foreground" />
         </Link>
-        <h1 className="font-phantom font-semibold text-7xl">Ship to Shop.</h1>
-        <p className="mt-6 max-w-2xl font-medium text-muted-foreground text-xl">
+        <h1 className="font-phantom font-semibold text-5xl sm:text-6xl md:text-7xl">
+          Ship to Shop.
+        </h1>
+        <p className="mx-4 mt-6 max-w-2xl font-medium text-muted-foreground sm:text-lg md:text-xl">
           Hack Club Merch is here. Build your own projects, get cool swags.
-          Browse limited-edition tees, stickers, and accessories designed by the
-          community, customize pieces for your club or event, and wear what you
-          ship.
+          <b className="hidden font-normal sm:block">
+            Browse limited-edition tees, stickers, and accessories designed by
+            the community, customize pieces for your club or event, and wear
+            what you ship.
+          </b>
         </p>
         <Button className="mt-8 font-inter" size="lg" asChild>
           <Link
@@ -52,7 +56,7 @@ export default function HomePage() {
           </p>
         </header>
         <div className="mx-auto mb-16 flex justify-center px-4">
-          <div className="grid grid-cols-4 space-x-5 overflow-hidden">
+          <div className="grid grid-cols-1 space-y-5 overflow-hidden md:grid-cols-4 md:space-x-5 md:space-y-0">
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
