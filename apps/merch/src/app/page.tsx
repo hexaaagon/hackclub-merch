@@ -1,5 +1,7 @@
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { Button, buttonVariants } from "@/components/ui/button";
 import PicsumImage from "@/components/ui/picsum";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
@@ -7,8 +9,9 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main>
-      <section className="mt-12 flex flex-col justify-center pb-12 pl-6 sm:mt-16 sm:items-center sm:pt-24 sm:pb-32 sm:pl-0 sm:text-center">
+    <main id="view-container" tabIndex={-1}>
+      <BackgroundRippleEffect />
+      <section className="mt-12 flex flex-col justify-center pb-12 pl-6 *:z-10 sm:mt-16 sm:items-center sm:pt-24 sm:pb-32 sm:pl-0 sm:text-center">
         <Link
           href="https://forms.fillout.com/t/5k2dwE9Lxpus"
           className={cn(
@@ -25,10 +28,10 @@ export default function HomePage() {
           Introducing Merch YSWS
           <ChevronRight className="ml-1 size-4 text-muted-foreground" />
         </Link>
-        <h1 className="font-medium font-phantom text-5xl [-webkit-text-stroke:1.5px] sm:font-semibold sm:text-6xl md:text-7xl sm:[-webkit-text-stroke:0px]">
+        <h1 className="bg-linear-to-b from-foreground to-foreground/60 bg-clip-text font-medium font-phantom text-5xl text-transparent [-webkit-text-stroke:1.5px] sm:font-semibold sm:text-6xl md:text-7xl sm:[-webkit-text-stroke:0px]">
           Ship to Shop.
         </h1>
-        <p className="mt-6 max-w-2xl font-medium text-lg text-muted-foreground sm:mx-4 md:text-xl">
+        <p className="mt-6 max-w-7/8 font-medium text-lg text-muted-foreground sm:mx-4 sm:max-w-2xl md:text-xl">
           Hack Club Merch is here. Build your own projects, get cool swags.
           <b className="hidden font-normal sm:block">
             Browse limited-edition tees, stickers, and accessories designed by
@@ -36,7 +39,7 @@ export default function HomePage() {
             what you ship.
           </b>
         </p>
-        <Button className="mt-8 w-min font-inter" size="lg" asChild>
+        <RainbowButton className="mt-8 w-min font-inter" size="lg" asChild>
           <Link
             href="https://forms.fillout.com/t/5k2dwE9Lxpus"
             target="_blank"
@@ -44,11 +47,11 @@ export default function HomePage() {
           >
             RSVP Now <ChevronRight />
           </Link>
-        </Button>
+        </RainbowButton>
       </section>
       <section className="space-y-8">
         <header className="space-y-2 pl-6">
-          <h2 className="max-w-3/4 font-medium font-phantom text-4xl [-webkit-text-stroke:1px] sm:max-w-none sm:text-center sm:font-semibold sm:text-5xl sm:[-webkit-text-stroke:0px]">
+          <h2 className="max-w-7/8 font-medium font-phantom text-4xl [-webkit-text-stroke:1px] sm:max-w-none sm:text-center sm:font-semibold sm:text-5xl sm:[-webkit-text-stroke:0px]">
             Hack Clubbers' Picks
           </h2>
           <p className="text-muted-foreground text-xl sm:text-center">
@@ -57,10 +60,10 @@ export default function HomePage() {
         </header>
         <div className="mx-auto mb-16 flex justify-center px-6">
           <div className="grid grid-cols-1 space-y-5 overflow-hidden md:grid-cols-4 md:space-x-5 md:space-y-0">
+            <PicsumImage sizes={[401, 500]} alt="Example merch banner" />
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
-            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
-            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
-            <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
+            <PicsumImage sizes={[399, 500]} alt="Example merch banner" />
+            <PicsumImage sizes={[400, 501]} alt="Example merch banner" />
           </div>
         </div>
       </section>
