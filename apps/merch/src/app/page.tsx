@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main>
-      <section className="mt-16 flex flex-col items-center justify-center pt-24 pb-32 text-center">
+      <section className="mt-12 flex flex-col justify-center pb-12 pl-6 sm:mt-16 sm:items-center sm:pt-24 sm:pb-32 sm:pl-0 sm:text-center">
         <Link
           href="https://forms.fillout.com/t/5k2dwE9Lxpus"
           className={cn(
@@ -16,7 +16,7 @@ export default function HomePage() {
               variant: "outline",
               size: "sm",
             }),
-            "mb-4 rounded-full",
+            "mb-4 w-min rounded-full",
           )}
           target="_blank"
           rel="noreferrer"
@@ -25,10 +25,10 @@ export default function HomePage() {
           Introducing Merch YSWS
           <ChevronRight className="ml-1 size-4 text-muted-foreground" />
         </Link>
-        <h1 className="font-phantom font-semibold text-5xl sm:text-6xl md:text-7xl">
+        <h1 className="font-medium font-phantom text-5xl [-webkit-text-stroke:1.5px] sm:font-semibold sm:text-6xl md:text-7xl sm:[-webkit-text-stroke:0px]">
           Ship to Shop.
         </h1>
-        <p className="mx-4 mt-6 max-w-2xl font-medium text-muted-foreground sm:text-lg md:text-xl">
+        <p className="mt-6 max-w-2xl font-medium text-lg text-muted-foreground sm:mx-4 md:text-xl">
           Hack Club Merch is here. Build your own projects, get cool swags.
           <b className="hidden font-normal sm:block">
             Browse limited-edition tees, stickers, and accessories designed by
@@ -36,7 +36,7 @@ export default function HomePage() {
             what you ship.
           </b>
         </p>
-        <Button className="mt-8 font-inter" size="lg" asChild>
+        <Button className="mt-8 w-min font-inter" size="lg" asChild>
           <Link
             href="https://forms.fillout.com/t/5k2dwE9Lxpus"
             target="_blank"
@@ -47,15 +47,15 @@ export default function HomePage() {
         </Button>
       </section>
       <section className="space-y-8">
-        <header>
-          <h2 className="text-center font-phantom font-semibold text-5xl">
-            Featured Merch
+        <header className="space-y-2 pl-6">
+          <h2 className="max-w-3/4 font-medium font-phantom text-4xl [-webkit-text-stroke:1px] sm:max-w-none sm:text-center sm:font-semibold sm:text-5xl sm:[-webkit-text-stroke:0px]">
+            Hack Clubbers' Picks
           </h2>
-          <p className="mt-2 text-center text-muted-foreground text-xl">
+          <p className="text-muted-foreground text-xl sm:text-center">
             Explore our curated selection of exclusive Hack Club merchandise.
           </p>
         </header>
-        <div className="mx-auto mb-16 flex justify-center px-4">
+        <div className="mx-auto mb-16 flex justify-center px-6">
           <div className="grid grid-cols-1 space-y-5 overflow-hidden md:grid-cols-4 md:space-x-5 md:space-y-0">
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />

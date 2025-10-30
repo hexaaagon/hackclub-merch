@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Search, ShoppingCart, User, User2 } from "lucide-react";
+import { Menu, Search, ShoppingCart, User, User2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { usePathname } from "next/navigation";
 
@@ -11,7 +11,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="w-full p-6 md:py-8">
+    <header className="w-full py-4 md:py-8">
       <div className="navbar-container mx-auto flex w-full items-center justify-between px-8 transition-[padding] sm:px-12 md:px-18">
         <div className="flex items-center space-x-12">
           <Link
@@ -48,15 +48,18 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex items-center space-x-8">
-          <Link href="/search">
+          <Link href="/search" className="hidden sm:block">
             <Search className="size-6 hover:opacity-80" />
           </Link>
-          <Link href="/carts">
+          <Link href="/carts" className="hidden sm:block">
             <ShoppingCart className="size-6 hover:opacity-80" />
           </Link>
           <Link href="/user">
             <User2 className="size-6 hover:opacity-80" />
           </Link>
+          <button type="button">
+            <Menu className="size-6 hover:opacity-80" />
+          </button>
         </div>
       </div>
     </header>
