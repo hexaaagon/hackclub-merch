@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import {
   type LucideIcon,
@@ -11,8 +12,17 @@ import {
   ShoppingCart,
   User2,
 } from "lucide-react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
-import { usePathname } from "next/navigation";
 
 const navItems: {
   main: { href: string; title: string }[];
@@ -131,8 +141,12 @@ export default function Navbar() {
                 </div>
               </Link>
               <div className="hidden items-center space-x-8 font-mono text-muted-foreground text-sm uppercase *:tracking-widest *:hover:underline sm:flex">
-                <Link href="/shop">Shop</Link>
-                <Link href="/about">About</Link>
+                {isMounted &&
+                  navItems.main.map(({ href, title }) => (
+                    <Link key={title} href={href} className="uppercase">
+                      {title}
+                    </Link>
+                  ))}
               </div>
             </div>
             <div className="flex items-center space-x-8">
@@ -157,14 +171,76 @@ export default function Navbar() {
                   },
                 )}
               <div className="md:hidden">
-                <button
-                  type="button"
-                  onClick={() => setOpen(!open)}
-                  className="flex items-center text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="Menu"
-                >
-                  <Menu className="size-6" />
-                </button>
+                <Drawer open={open} onOpenChange={setOpen} direction="top">
+                  <DrawerTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex items-center text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <p className="sr-only">View Menu</p>
+                      <Menu className="size-6" />
+                    </button>
+                  </DrawerTrigger>
+                  <DrawerContent className="pt-6 pb-4">
+                    <DrawerTitle className="sr-only">Menu</DrawerTitle>
+                    <Link
+                      href={pathname === "/" ? "https://hackclub.com" : "/"}
+                      className="group mx-auto my-2 flex h-5 items-center space-x-4 pl-5"
+                    >
+                      <Image
+                        src="/static/logos/hackclub-rounded.svg"
+                        alt="Hack Club Logo"
+                        width={40}
+                        height={40}
+                        className="size-9"
+                      />
+                      <Separator orientation="vertical" className="mr-2" />
+                      <div>
+                        <p className="-tracking-widest font-inter font-semibold text-[1.25rem]">
+                          Hack Club
+                        </p>
+                        <Image
+                          src="/static/typographies/merch.png"
+                          alt="Hack Club Logo"
+                          width={100}
+                          height={50}
+                          className="-mt-6 ml-8 invert-100 transition-[filter] dark:invert-0"
+                        />
+                      </div>
+                    </Link>
+                    <div className="flex flex-col space-y-4 px-8 py-4">
+                      {navItems.main.map(({ href, title }) => (
+                        <Link
+                          key={title}
+                          href={href}
+                          className="text-3xl uppercase"
+                          onClick={() => setOpen(false)}
+                        >
+                          {title}
+                        </Link>
+                      ))}
+                      <Separator />
+                      {navItems.utilities.map(
+                        ({ href, title, icon: Icon, hidden }) => {
+                          const isHidden = hidden === "mobile";
+                          if (!isHidden) return null;
+
+                          return (
+                            <Link
+                              key={title}
+                              href={href}
+                              className="flex items-center space-x-2 text-2xl capitalize"
+                              onClick={() => setOpen(false)}
+                            >
+                              <Icon className="size-5" />
+                              <span>{title}</span>
+                            </Link>
+                          );
+                        },
+                      )}
+                    </div>
+                  </DrawerContent>
+                </Drawer>
               </div>
             </div>
           </div>
