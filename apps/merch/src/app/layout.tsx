@@ -73,7 +73,7 @@ export default function RootLayout({
       <body
         className={cn(
           fonts.map((font) => font.variable).join(" "),
-          "antialiased",
+          "min-h-screen antialiased",
         )}
       >
         {children}

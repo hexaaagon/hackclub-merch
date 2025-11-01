@@ -36,6 +36,19 @@ const nextConfig: NextConfig = {
         source: "/user",
         destination: "/error-pages/page-unavailable",
       },
+
+      {
+        source: "/accessories",
+        destination: "/error-pages/page-unavailable",
+      },
+      {
+        source: "/apparel",
+        destination: "/error-pages/page-unavailable",
+      },
+      {
+        source: "/collections",
+        destination: "/error-pages/page-unavailable",
+      },
     ];
   },
 };

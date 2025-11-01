@@ -18,7 +18,13 @@ export default function PicsumImage({
 >) {
   return (
     // ensure the badge is clipped to the image area and stays on top
-    <div className="relative inline-block overflow-hidden rounded-lg">
+    <div
+      className="relative inline-block overflow-hidden rounded-lg"
+      style={{
+        maxWidth: `${Array.isArray(sizes) ? sizes[0] : sizes}px`,
+        height: `${Array.isArray(sizes) ? sizes[1] : sizes}px`,
+      }}
+    >
       <Image
         src={
           id

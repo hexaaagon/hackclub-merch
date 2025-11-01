@@ -13,7 +13,7 @@ export default function HomePage() {
       <BackgroundRippleEffect />
       <section className="mt-12 flex flex-col justify-center pb-12 pl-6 *:z-10 sm:mt-16 sm:items-center sm:pt-24 sm:pb-32 sm:pl-0 sm:text-center">
         <Link
-          href="https://forms.fillout.com/t/5k2dwE9Lxpus"
+          href="https://hackclub.slack.com/archives/C09JQFECCBG"
           className={cn(
             buttonVariants({
               variant: "outline",
@@ -28,15 +28,15 @@ export default function HomePage() {
           Introducing Merch YSWS
           <ChevronRight className="ml-1 size-4 text-muted-foreground" />
         </Link>
-        <h1 className="bg-linear-to-b from-foreground to-foreground/60 bg-clip-text font-medium font-phantom text-5xl text-transparent [-webkit-text-stroke:1.5px] sm:font-semibold sm:text-6xl md:text-7xl sm:[-webkit-text-stroke:0px]">
+        <h1 className="bg-linear-to-b from-foreground to-foreground/70 bg-clip-text font-medium font-phantom text-5xl text-transparent [-webkit-text-stroke:1.5px] sm:font-semibold sm:text-6xl md:text-7xl sm:[-webkit-text-stroke:0px]">
           Ship to Shop.
         </h1>
         <p className="mt-6 max-w-7/8 font-medium text-lg text-muted-foreground sm:mx-4 sm:max-w-2xl md:text-xl">
           Hack Club Merch is here. Build your own projects, get cool swags.
           <b className="hidden font-normal sm:block">
             Browse limited-edition tees, stickers, and accessories designed by
-            the community, customize pieces for your club or event, and wear
-            what you ship.
+            the community, customize pieces from your journey, and wear what you
+            ship.
           </b>
         </p>
         <RainbowButton className="mt-8 w-min font-inter" size="lg" asChild>

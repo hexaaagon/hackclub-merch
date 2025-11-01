@@ -56,6 +56,7 @@ export default function Navbar() {
 
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [scrollHeight, setScrollHeight] = useState(0);
 
   useEffect(() => {
     setIsMounted(true);
@@ -67,6 +68,7 @@ export default function Navbar() {
 
     const handleScroll = () => {
       const currentY = window.scrollY || 0;
+      setScrollHeight(currentY);
 
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
@@ -97,7 +99,7 @@ export default function Navbar() {
     <>
       <header
         ref={headerRef}
-        className="fixed top-0 right-0 left-0 z-50 transform bg-background transition-transform duration-300 will-change-transform"
+        className={`fixed top-0 right-0 left-0 z-50 transform shadow-md transition duration-700 will-change-transform ${scrollHeight < 15 ? "bg-transparent shadow-none" : "bg-background shadow-b"}`}
         style={{
           transform: transformStyle,
           transitionTimingFunction: "cubic-bezier(.22,.9,.22,1)",
@@ -246,7 +248,7 @@ export default function Navbar() {
           </div>
         </div>
       </header>
-      <div aria-hidden style={{ height: headerHeight }} />
+      <div aria-hidden style={{ height: isMounted ? headerHeight : "100px" }} />
     </>
   );
 }
