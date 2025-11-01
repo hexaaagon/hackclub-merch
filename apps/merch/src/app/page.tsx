@@ -1,8 +1,9 @@
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import PicsumImage from "@/components/ui/picsum";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Separator } from "@/components/ui/separator";
+import { VideoScrollAnimation } from "@/components/video-scroll-animation";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -49,7 +50,23 @@ export default function HomePage() {
           </Link>
         </RainbowButton>
       </section>
-      <section className="space-y-8">
+
+      {/* Video Scroll Animation Section */}
+      <VideoScrollAnimation className="relative" />
+
+      {/* Black section for video end transition */}
+      <section className="flex items-center justify-center bg-black pt-[40vh] pb-[50vh]">
+        <div className="space-y-6 px-6 text-center">
+          <h2 className="font-phantom font-semibold text-5xl text-white md:text-6xl">
+            Your Story Awaits
+          </h2>
+          <p className="mx-auto max-w-2xl text-gray-400 text-xl">
+            Join the community and start shipping your projects today.
+          </p>
+        </div>
+      </section>
+
+      <section className="mt-12 mb-16 space-y-8">
         <header className="space-y-2 pl-6">
           <h2 className="max-w-7/8 font-medium font-phantom text-4xl [-webkit-text-stroke:1px] sm:max-w-none sm:text-center sm:font-semibold sm:text-5xl sm:[-webkit-text-stroke:0px]">
             Hack Clubbers' Picks
@@ -58,7 +75,7 @@ export default function HomePage() {
             Explore our curated selection of exclusive Hack Club merchandise.
           </p>
         </header>
-        <div className="mx-auto mb-16 flex justify-center px-6">
+        <div className="mx-auto flex justify-center px-6">
           <div className="grid grid-cols-1 space-y-5 overflow-hidden md:grid-cols-4 md:space-x-5 md:space-y-0">
             <PicsumImage sizes={[401, 500]} alt="Example merch banner" />
             <PicsumImage sizes={[400, 500]} alt="Example merch banner" />
