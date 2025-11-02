@@ -5,9 +5,13 @@
 // since AI generates a very bad code fr.
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import JSZip from "jszip";
+
+import { manifest } from "@merch/config/frames/marketing-story";
+import type { VideoScrollAnimationProps } from "@merch/types/frames/marketing-story";
 
 // Register GSAP plugin
 if (typeof window !== "undefined") {
@@ -16,8 +20,17 @@ if (typeof window !== "undefined") {
 
 // IndexedDB cache for persistent frame storage
 const DB_NAME = "merch-frames-cache";
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Increment version for ZIP-based cache
 const STORE_NAME = "frames";
+const META_STORE_NAME = "metadata";
+
+interface LoadingState {
+  stage: "idle" | "downloading" | "extracting" | "ready" | "error";
+  progress: number;
+  message: string;
+  currentFrame?: number;
+  totalFrames?: number;
+}
 
 class FrameCacheDB {
   private db: IDBDatabase | null = null;
@@ -36,8 +49,15 @@ class FrameCacheDB {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
+
+        // Create frames store if it doesn't exist
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME);
+        }
+
+        // Create metadata store if it doesn't exist
+        if (!db.objectStoreNames.contains(META_STORE_NAME)) {
+          db.createObjectStore(META_STORE_NAME);
         }
       };
     });
@@ -72,36 +92,50 @@ class FrameCacheDB {
       transaction.onerror = () => resolve(); // Silent fail
     });
   }
+
+  async getMetadata(key: string): Promise<any> {
+    if (!this.db) await this.init();
+    const db = this.db;
+    if (!db) return null;
+
+    return new Promise((resolve) => {
+      const transaction = db.transaction([META_STORE_NAME], "readonly");
+      const store = transaction.objectStore(META_STORE_NAME);
+      const request = store.get(key);
+
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => resolve(null);
+    });
+  }
+
+  async setMetadata(key: string, value: any): Promise<void> {
+    if (!this.db) await this.init();
+    const db = this.db;
+    if (!db) return;
+
+    return new Promise((resolve) => {
+      const transaction = db.transaction([META_STORE_NAME], "readwrite");
+      const store = transaction.objectStore(META_STORE_NAME);
+      store.put(value, key);
+
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => resolve(); // Silent fail
+    });
+  }
+
+  async hasQuality(quality: string): Promise<boolean> {
+    const metadata = await this.getMetadata(`${quality}-cached`);
+    return metadata === true;
+  }
 }
 
 const frameDB = new FrameCacheDB();
-
-interface FrameManifest {
-  frameCount: number;
-  fps: number;
-  duration: number;
-  qualities: {
-    [key: string]: {
-      width: number;
-      height: number;
-      basePath: string;
-      pattern: string;
-      totalSize: number;
-      avgFrameSize: number;
-    };
-  };
-}
-
-interface VideoScrollAnimationProps {
-  className?: string;
-}
 
 export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const pinElementRef = useRef<HTMLDivElement>(null);
-  const [manifest, setManifest] = useState<FrameManifest | null>(null);
 
   // Frame cache: Map<frameIndex, HTMLImageElement>
   const frameCache = useRef<Map<number, HTMLImageElement>>(new Map());
@@ -116,17 +150,128 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
   // Last frame for velocity calculation
   const lastFrameRef = useRef<number>(0);
   const lastFrameTimeRef = useRef<number>(Date.now());
+  // Track if initialization has started to prevent multiple calls
+  const initStartedRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    // Load manifest
-    fetch("/static/frames/merch-story/manifest.json")
-      .then((res) => res.json())
-      .then((data: FrameManifest) => {
-        setManifest(data);
-      })
-      .catch((err) => console.error("Failed to load frame manifest:", err));
-  }, []);
+  // Loading state
+  const [loadingState, setLoadingState] = useState<LoadingState>({
+    stage: "idle",
+    progress: 0,
+    message: "",
+  });
 
+  // Download and extract ZIP file
+  const downloadAndExtractZip = useCallback(
+    async (quality: string, zipUrl: string): Promise<void> => {
+      try {
+        setLoadingState({
+          stage: "downloading",
+          progress: 0,
+          message: "Downloading frames...",
+        });
+
+        // Download ZIP with progress tracking
+        const response = await fetch(zipUrl, { cache: "force-cache" });
+        if (!response.ok) {
+          throw new Error(`Failed to download ZIP: ${response.statusText}`);
+        }
+
+        const contentLength = parseInt(
+          response.headers.get("Content-Length") || "0",
+          10,
+        );
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error("Response body is not readable");
+        }
+
+        const chunks: Uint8Array[] = [];
+        let receivedLength = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          chunks.push(value);
+          receivedLength += value.length;
+
+          if (contentLength > 0) {
+            const progress = Math.round((receivedLength / contentLength) * 100);
+            setLoadingState({
+              stage: "downloading",
+              progress,
+              message: `Downloading frames... ${progress}%`,
+            });
+          }
+        }
+
+        // Combine chunks into single Uint8Array
+        const zipData = new Uint8Array(receivedLength);
+        let position = 0;
+        for (const chunk of chunks) {
+          zipData.set(chunk, position);
+          position += chunk.length;
+        }
+
+        // Extract ZIP
+        setLoadingState({
+          stage: "extracting",
+          progress: 0,
+          message: "Extracting frames...",
+          totalFrames: manifest.frameCount,
+        });
+
+        const zip = await JSZip.loadAsync(zipData);
+        const fileNames = Object.keys(zip.files).filter((name) =>
+          name.endsWith(".webp"),
+        );
+
+        let extracted = 0;
+        for (const fileName of fileNames) {
+          const file = zip.files[fileName];
+          if (file.dir) continue;
+
+          const blob = await file.async("blob");
+          const frameMatch = fileName.match(/frame_(\d+)\.webp/);
+          if (frameMatch) {
+            const frameIndex = parseInt(frameMatch[1], 10) - 1; // 0-indexed
+            const cacheKey = `${quality}-${frameIndex}`;
+            await frameDB.set(cacheKey, blob);
+
+            extracted++;
+            const progress = Math.round((extracted / fileNames.length) * 100);
+            setLoadingState({
+              stage: "extracting",
+              progress,
+              message: `Extracting frames... ${extracted}/${fileNames.length}`,
+              currentFrame: extracted,
+              totalFrames: fileNames.length,
+            });
+          }
+        }
+
+        // Mark quality as cached
+        await frameDB.setMetadata(`${quality}-cached`, true);
+
+        setLoadingState({
+          stage: "ready",
+          progress: 100,
+          message: "Ready",
+        });
+      } catch (err) {
+        console.error("Failed to download and extract ZIP:", err);
+        setLoadingState({
+          stage: "error",
+          progress: 0,
+          message: "Failed to load frames. Please refresh the page.",
+        });
+        throw err;
+      }
+    },
+    [], // setLoadingState is stable from useState
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: downloadAndExtractZip is stable and initStartedRef prevents multiple calls
   useEffect(() => {
     const canvas = canvasRef.current;
     const backgroundCanvas = backgroundCanvasRef.current;
@@ -178,7 +323,44 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
     backgroundCanvas.width = qualityConfig.width;
     backgroundCanvas.height = qualityConfig.height;
 
-    // Load a single frame with IndexedDB persistent cache
+    // Initialize ZIP loading
+    const initFrames = async () => {
+      // Prevent multiple initializations
+      if (initStartedRef.current) return;
+      initStartedRef.current = true;
+
+      try {
+        await frameDB.init();
+
+        // Check if frames are already cached
+        const isCached = await frameDB.hasQuality(quality);
+
+        if (!isCached) {
+          // Download and extract ZIP
+          await downloadAndExtractZip(quality, qualityConfig.zipUrl);
+        } else {
+          setLoadingState({
+            stage: "ready",
+            progress: 100,
+            message: "Loaded from cache",
+          });
+        }
+      } catch (err) {
+        console.error("Failed to initialize frames:", err);
+        setLoadingState({
+          stage: "error",
+          progress: 0,
+          message: "Failed to load frames. Please refresh the page.",
+        });
+      }
+    };
+
+    // Only initialize if not already ready/loading
+    if (loadingState.stage === "idle") {
+      initFrames();
+    }
+
+    // Load a single frame from IndexedDB cache
     const loadFrame = (frameIndex: number): Promise<HTMLImageElement> => {
       // Check memory cache first (synchronous)
       const cachedFrame = frameCache.current.get(frameIndex);
@@ -203,70 +385,35 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
       loadingFrames.current.add(frameIndex);
 
       const frameKey = `${quality}-${frameIndex}`;
-      const framePath = `${qualityConfig.basePath}/${qualityConfig.pattern.replace("%04d", String(frameIndex).padStart(4, "0"))}`;
 
-      // Load from network and cache
-      const loadFromNetwork = (): Promise<HTMLImageElement> => {
-        return fetch(framePath, {
-          cache: "force-cache", // Use browser cache aggressively
-        })
-          .then((response) => response.blob())
-          .then(async (blob) => {
-            // Store in IndexedDB for future page loads
-            try {
-              await frameDB.set(frameKey, blob);
-            } catch (err) {
-              console.warn("IndexedDB write failed:", err);
-            }
-
-            // Create image from blob
-            return new Promise<HTMLImageElement>((resolve, reject) => {
-              const img = new Image();
-              img.onload = () => {
-                frameCache.current.set(frameIndex, img);
-                loadingFrames.current.delete(frameIndex);
-                resolve(img);
-              };
-              img.onerror = () => {
-                loadingFrames.current.delete(frameIndex);
-                reject(new Error(`Failed to load frame ${frameIndex}`));
-              };
-              img.src = URL.createObjectURL(blob);
-            });
-          })
-          .catch((err) => {
-            loadingFrames.current.delete(frameIndex);
-            throw err;
-          });
-      };
-
-      // Try IndexedDB cache first, then network
+      // Load from IndexedDB
       return frameDB
         .get(frameKey)
         .then((cachedBlob) => {
-          if (cachedBlob) {
-            // Load from IndexedDB (no R2 request!)
-            return new Promise<HTMLImageElement>((resolve, reject) => {
-              const img = new Image();
-              img.onload = () => {
-                frameCache.current.set(frameIndex, img);
-                loadingFrames.current.delete(frameIndex);
-                resolve(img);
-              };
-              img.onerror = () => {
-                // If cached blob fails, fall back to network
-                loadFromNetwork().then(resolve).catch(reject);
-              };
-              img.src = URL.createObjectURL(cachedBlob);
-            });
-          } else {
-            // Not in IndexedDB, load from network
-            return loadFromNetwork();
+          if (!cachedBlob) {
+            loadingFrames.current.delete(frameIndex);
+            throw new Error(`Frame ${frameIndex} not found in cache`);
           }
+
+          // Load from cached blob
+          return new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+              frameCache.current.set(frameIndex, img);
+              loadingFrames.current.delete(frameIndex);
+              resolve(img);
+            };
+            img.onerror = () => {
+              loadingFrames.current.delete(frameIndex);
+              reject(new Error(`Failed to load frame ${frameIndex}`));
+            };
+            img.src = URL.createObjectURL(cachedBlob);
+          });
         })
         .catch((err) => {
-          console.warn("IndexedDB read failed, using network:", err);
-          return loadFromNetwork();
+          console.warn(`Failed to load frame ${frameIndex}:`, err);
+          loadingFrames.current.delete(frameIndex);
+          throw err;
         });
     };
 
@@ -402,63 +549,81 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
     };
 
     // GSAP ScrollTrigger setup for frame scrubbing
-    const trigger = ScrollTrigger.create({
-      trigger: container,
-      start: "top top",
-      end: "bottom bottom",
-      pin: pinElement, // Pin the inner element
-      pinSpacing: false, // Don't add spacing
-      anticipatePin: 1, // Smoother pinning
-      scrub: 0.5, // Slight smoothing for better feel
-      onUpdate: (self) => {
-        // Calculate target frame based on scroll progress
-        // Clamp to ensure we stay within bounds
-        const targetFrame = Math.min(
-          manifest.frameCount - 1,
-          Math.max(0, Math.floor(self.progress * (manifest.frameCount - 1))),
-        );
+    let trigger: ScrollTrigger | null = null;
 
-        // Calculate velocity (frames jumped per time)
-        const now = Date.now();
-        const timeDelta = now - lastFrameTimeRef.current;
-        const frameDelta = Math.abs(targetFrame - lastFrameRef.current);
-        const velocity = timeDelta > 0 ? frameDelta / timeDelta : 0;
+    const setupScrollTrigger = () => {
+      if (loadingState.stage !== "ready") {
+        // Wait for frames to be ready
+        return;
+      }
 
-        lastFrameRef.current = targetFrame;
-        lastFrameTimeRef.current = now;
+      trigger = ScrollTrigger.create({
+        trigger: container,
+        start: "top top",
+        end: "bottom bottom",
+        pin: pinElement, // Pin the inner element
+        pinSpacing: false, // Don't add spacing
+        anticipatePin: 1, // Smoother pinning
+        scrub: 0.5, // Slight smoothing for better feel
+        onUpdate: (self) => {
+          // Calculate target frame based on scroll progress
+          // Clamp to ensure we stay within bounds
+          const targetFrame = Math.min(
+            manifest.frameCount - 1,
+            Math.max(0, Math.floor(self.progress * (manifest.frameCount - 1))),
+          );
 
-        // Draw frame if it's different from current
-        if (targetFrame !== currentFrameRef.current) {
-          drawFrame(targetFrame);
+          // Calculate velocity (frames jumped per time)
+          const now = Date.now();
+          const timeDelta = now - lastFrameTimeRef.current;
+          const frameDelta = Math.abs(targetFrame - lastFrameRef.current);
+          const velocity = timeDelta > 0 ? frameDelta / timeDelta : 0;
 
-          // Only preload if scrolling slowly (velocity < 0.5 frames/ms)
-          // or debounce preload during fast scrolling
-          if (velocity < 0.5) {
-            // Slow scroll - preload immediately with smaller window
-            preloadFrames(targetFrame, 5, true);
-          } else {
-            // Fast scroll - debounce preload (waits 150ms after scroll stops)
-            preloadFrames(targetFrame, 10, false);
+          lastFrameRef.current = targetFrame;
+          lastFrameTimeRef.current = now;
+
+          // Draw frame if it's different from current
+          if (targetFrame !== currentFrameRef.current) {
+            drawFrame(targetFrame);
+
+            // Only preload if scrolling slowly (velocity < 0.5 frames/ms)
+            // or debounce preload during fast scrolling
+            if (velocity < 0.5) {
+              // Slow scroll - preload immediately with smaller window
+              preloadFrames(targetFrame, 5, true);
+            } else {
+              // Fast scroll - debounce preload (waits 150ms after scroll stops)
+              preloadFrames(targetFrame, 10, false);
+            }
           }
-        }
-      },
-    });
+        },
+      });
 
-    // Initial load: draw first frame and preload initial window
-    drawFrame(0).then(() => {
-      preloadFrames(0, 10, true);
-    });
+      // Initial load: draw first frame and preload initial window
+      drawFrame(0).then(() => {
+        preloadFrames(0, 10, true);
+      });
+    };
+
+    // Setup scroll trigger when frames are ready
+    if (loadingState.stage === "ready") {
+      setupScrollTrigger();
+    }
 
     // Cleanup
     return () => {
-      trigger.kill();
+      if (trigger) {
+        trigger.kill();
+      }
       if (preloadTimeoutRef.current) {
         clearTimeout(preloadTimeoutRef.current);
       }
       frameCache.current.clear();
       loadingFrames.current.clear();
+      // Reset init flag on cleanup
+      initStartedRef.current = false;
     };
-  }, [manifest]);
+  }, [loadingState.stage]);
 
   // Calculate scroll height based on frame count
   // Using 1.5vh per frame to prevent gap: 103 frames * 1.5vh = 154.5vh
@@ -470,7 +635,7 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
       className={className}
       style={{ height: scrollHeight }}
     >
-      <div ref={pinElementRef} className="h-screen w-full">
+      <div ref={pinElementRef} className="relative h-screen w-full">
         {/* Background canvas - blurred, cover (shows from frame 75+) */}
         <canvas
           ref={backgroundCanvasRef}
@@ -481,6 +646,42 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
           ref={canvasRef}
           className="absolute inset-0 h-full w-full object-contain"
         />
+
+        {/* Loading UI */}
+        {loadingState.stage !== "ready" && loadingState.stage !== "idle" && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/80 text-white">
+            <div className="max-w-md space-y-4 px-4 text-center">
+              {loadingState.stage === "error" ? (
+                <>
+                  <div className="font-semibold text-red-500 text-xl">
+                    ⚠️ Error
+                  </div>
+                  <p>{loadingState.message}</p>
+                </>
+              ) : (
+                <>
+                  <div className="font-semibold text-lg">
+                    {loadingState.message}
+                  </div>
+                  <div className="h-2.5 w-full rounded-full bg-gray-700">
+                    <div
+                      className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
+                      style={{ width: `${loadingState.progress}%` }}
+                    />
+                  </div>
+                  {loadingState.stage === "extracting" &&
+                    loadingState.currentFrame &&
+                    loadingState.totalFrames && (
+                      <p className="text-gray-400 text-sm">
+                        {loadingState.currentFrame} / {loadingState.totalFrames}{" "}
+                        frames
+                      </p>
+                    )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,10 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 import {
   type LucideIcon,
   Menu,
@@ -12,6 +7,10 @@ import {
   ShoppingCart,
   User2,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -99,7 +98,7 @@ export default function Navbar() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 right-0 left-0 z-50 transform shadow-md transition duration-700 will-change-transform ${scrollHeight < 15 ? "bg-transparent shadow-none" : "bg-background shadow-b"}`}
+        className={`fixed top-0 right-0 left-0 z-50 transform mix-blend-difference shadow-md transition duration-700 will-change-transform *:invert ${scrollHeight < 15 ? "bg-transparent shadow-none" : "shadow-b backdrop-blur-sm"}`}
         style={{
           transform: transformStyle,
           transitionTimingFunction: "cubic-bezier(.22,.9,.22,1)",
@@ -111,7 +110,9 @@ export default function Navbar() {
         >
           Skip to content
         </a>
-        <div className="w-full py-4 md:py-8">
+        <div
+          className={`w-full transition-[padding] duration-300 ${scrollHeight < 15 ? "py-4 md:py-8" : "py-3 md:py-6"}`}
+        >
           <div className="navbar-container mx-auto flex w-full items-center justify-between px-8 transition-[padding] sm:px-12 md:px-18">
             <div className="flex items-center space-x-12">
               <Link
