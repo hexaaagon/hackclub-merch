@@ -69,11 +69,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <body
         className={cn(
           fonts.map((font) => font.variable).join(" "),
-          "min-h-screen antialiased",
+          "min-h-screen overflow-x-hidden antialiased",
         )}
       >
         {children}

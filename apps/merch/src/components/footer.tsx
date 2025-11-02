@@ -51,7 +51,7 @@ export default function Footer() {
                 RSVP Now to make this YSWS happened!
               </p>
             </div>
-            <div className="flex items-center space-x-2.5">
+            <div className="flex flex-col items-center space-y-4 md:flex-row md:space-x-2.5 md:space-y-0">
               <Input
                 type="email"
                 placeholder="Your email address"
@@ -60,7 +60,7 @@ export default function Footer() {
                 onChange={(e) => setRsvpEmail(e.target.value)}
               />
               <Button
-                className="bg-footer-primary px-8 font-medium text-footer-primary-foreground hover:bg-footer-primary/90"
+                className="w-full bg-footer-primary px-8 font-medium text-footer-primary-foreground hover:bg-footer-primary/90 md:w-auto"
                 onClick={() => {
                   if (!rsvpEmail) {
                     window.open(
