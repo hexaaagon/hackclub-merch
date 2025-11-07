@@ -10,6 +10,20 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./*": {
+      "import": [
+        "./src/schema/*.ts",
+        "./src/schema/*/index.ts"
+      ],
+      "types": [
+        "./src/schema/*.ts",
+        "./src/schema/*/index.ts"
+      ],
+      "default": [
+        "./src/schema/*.ts",
+        "./src/schema/*/index.ts"
+      ]
     }
   },
   "scripts": {

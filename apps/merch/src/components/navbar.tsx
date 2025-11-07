@@ -1,5 +1,9 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+
 import {
   type LucideIcon,
   Menu,
@@ -7,10 +11,6 @@ import {
   ShoppingCart,
   User2,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -39,15 +39,13 @@ const navItems: {
   utilities: [
     { href: "/search", title: "search", icon: Search, hidden: "mobile" },
     { href: "/carts", title: "carts", icon: ShoppingCart, hidden: "mobile" },
-    { href: "/user", title: "user", icon: User2 },
+    { href: "/login", title: "account", icon: User2 },
   ],
 };
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-
-  const pathname = usePathname();
 
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -97,12 +95,12 @@ export default function Navbar() {
   return (
     <>
       <header
-        ref={headerRef}
         className={`fixed top-0 right-0 left-0 z-50 transform mix-blend-difference shadow-md transition duration-700 will-change-transform *:invert ${scrollHeight < 15 ? "bg-transparent shadow-none" : "shadow-b backdrop-blur-sm"}`}
         style={{
           transform: transformStyle,
           transitionTimingFunction: "cubic-bezier(.22,.9,.22,1)",
         }}
+        ref={headerRef}
       >
         <a
           href="#view-container"
@@ -116,7 +114,7 @@ export default function Navbar() {
           <div className="navbar-container mx-auto flex w-full items-center justify-between px-8 transition-[padding] sm:px-12 md:px-18">
             <div className="flex items-center space-x-12">
               <Link
-                href={pathname === "/" ? "https://hackclub.com" : "/"}
+                href="/"
                 className="group my-2 flex h-5 items-center space-x-4"
               >
                 <Image
@@ -139,7 +137,7 @@ export default function Navbar() {
                     alt="Hack Club Logo"
                     width={100}
                     height={50}
-                    className="-mt-1 -ml-3 md:-mt-6 invert-100 transition-[filter] md:ml-8 dark:invert-0"
+                    className="-mt-1 -ml-3 md:-mt-6 invert md:ml-8"
                   />
                 </div>
               </Link>
@@ -187,7 +185,7 @@ export default function Navbar() {
                   <DrawerContent className="pt-6 pb-4">
                     <DrawerTitle className="sr-only">Menu</DrawerTitle>
                     <Link
-                      href={pathname === "/" ? "https://hackclub.com" : "/"}
+                      href="/"
                       className="group mx-auto my-2 flex h-5 items-center space-x-4 pl-5"
                     >
                       <Image

@@ -1,4 +1,3 @@
-import Navbar from "./navbar";
 import { ReactScan } from "./react-scan";
 
 export default function ThemeProvider({
@@ -9,7 +8,6 @@ export default function ThemeProvider({
   return (
     <>
       <ReactScan />
-      <Navbar />
       {children}
     </>
   );

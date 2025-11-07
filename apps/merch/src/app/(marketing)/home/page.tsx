@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { buttonVariants } from "@/components/ui/button";
-import PicsumImage from "@/components/ui/picsum";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Separator } from "@/components/ui/separator";
 import { VideoScrollAnimation } from "@/components/video-scroll-animation";
@@ -14,7 +13,7 @@ import Image from "next/image";
 
 export default function HomePage() {
   return (
-    <main id="view-container" tabIndex={-1}>
+    <main id="view-container">
       <BackgroundRippleEffect />
       <section className="mt-12 flex flex-col justify-center pb-12 pl-6 *:z-10 sm:mt-16 sm:items-center sm:pt-24 sm:pb-32 sm:pl-0 sm:text-center">
         <Link

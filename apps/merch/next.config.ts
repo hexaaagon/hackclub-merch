@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.slack-edge.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   rewrites: async () => {
@@ -29,11 +35,6 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/carts",
-        destination: "/error-pages/page-unavailable",
-      },
-
-      {
-        source: "/user",
         destination: "/error-pages/page-unavailable",
       },
 
