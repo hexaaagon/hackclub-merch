@@ -61,6 +61,9 @@ const fonts = [dmSans, inter, geistMono, grotesque, phantom];
 export const metadata: Metadata = {
   title: "Hack Club Merch",
   description: "Merch YSWS - Hack Club",
+  openGraph: {
+    images: "/static/images/banner.png",
+  },
 };
 
 export default function RootLayout({

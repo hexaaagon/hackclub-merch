@@ -68,7 +68,7 @@ export default function Navbar({
                 className="group my-2 flex h-5 items-center space-x-4"
               >
                 <Image
-                  src="/static/logos/hackclub-rounded.svg"
+                  src="/static/images/logos/hackclub-rounded.svg"
                   alt="Hack Club Logo"
                   width={32}
                   height={32}
@@ -83,7 +83,7 @@ export default function Navbar({
                     Hack Club
                   </p>
                   <Image
-                    src="/static/typographies/merch.png"
+                    src="/static/images/typographies/merch.png"
                     alt="Merch Logo"
                     width={100 * 0.75}
                     height={50 * 0.75}

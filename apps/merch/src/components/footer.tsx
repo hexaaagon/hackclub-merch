@@ -92,7 +92,7 @@ export default function Footer() {
               rel="noopener noreferrer"
             >
               <Image
-                src="/static/logos/hackclub-flag.svg"
+                src="/static/images/logos/hackclub-flag.svg"
                 alt="Hack Club Logo"
                 width={90}
                 height={60}

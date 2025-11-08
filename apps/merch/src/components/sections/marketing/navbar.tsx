@@ -118,7 +118,7 @@ export default function Navbar() {
                 className="group my-2 flex h-5 items-center space-x-4"
               >
                 <Image
-                  src="/static/logos/hackclub-rounded.svg"
+                  src="/static/images/logos/hackclub-rounded.svg"
                   alt="Hack Club Logo"
                   width={40}
                   height={40}
@@ -133,7 +133,7 @@ export default function Navbar() {
                     Hack Club
                   </p>
                   <Image
-                    src="/static/typographies/merch.png"
+                    src="/static/images/typographies/merch.png"
                     alt="Hack Club Logo"
                     width={100}
                     height={50}
@@ -189,7 +189,7 @@ export default function Navbar() {
                       className="group mx-auto my-2 flex h-5 items-center space-x-4 pl-5"
                     >
                       <Image
-                        src="/static/logos/hackclub-rounded.svg"
+                        src="/static/images/logos/hackclub-rounded.svg"
                         alt="Hack Club Logo"
                         width={40}
                         height={40}
@@ -201,7 +201,7 @@ export default function Navbar() {
                           Hack Club
                         </p>
                         <Image
-                          src="/static/typographies/merch.png"
+                          src="/static/images/typographies/merch.png"
                           alt="Hack Club Logo"
                           width={100}
                           height={50}

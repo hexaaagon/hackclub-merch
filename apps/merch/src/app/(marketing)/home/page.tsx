@@ -73,7 +73,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 space-y-10 overflow-hidden md:space-x-5 lg:grid-cols-3 lg:space-y-0">
             <div className="flex flex-col">
               <Image
-                src="/static/catalogs/orpheus-pet.jpg"
+                src="/static/images/catalogs/orpheus-pet.jpg"
                 width={500 * 0.75}
                 height={625 * 0.75}
                 alt="Orpheus"
@@ -86,7 +86,7 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col">
               <Image
-                src="/static/catalogs/family-reunion.jpg"
+                src="/static/images/catalogs/family-reunion.jpg"
                 width={500 * 0.75}
                 height={625 * 0.75}
                 alt="Orpheus"
@@ -99,7 +99,7 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col">
               <Image
-                src="/static/catalogs/daydream.jpg"
+                src="/static/images/catalogs/daydream.jpg"
                 width={500 * 0.75}
                 height={625 * 0.75}
                 alt="Daydream Shirt"
