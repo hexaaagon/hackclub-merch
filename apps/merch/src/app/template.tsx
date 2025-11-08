@@ -6,10 +6,5 @@ export default function RootTemplate({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ThemeProvider>
-      {children}
-      <Footer />
-    </ThemeProvider>
-  );
+  return <ThemeProvider>{children}</ThemeProvider>;
 }

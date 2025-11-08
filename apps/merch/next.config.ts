@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // needed because slack oauth does not support http urls
   // allowedDevOrigins: ["https://supreme-kodiak-stable.ngrok-free.app"],
+  transpilePackages: [
+    "@merch/config",
+    "@merch/auth",
+    "@merch/drizzle",
+    "@merch/types",
+  ],
   images: {
     remotePatterns: [
       {

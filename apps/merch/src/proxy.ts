@@ -9,6 +9,15 @@ type Session = typeof auth.$Infer.Session;
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
+  // Skip session check for static paths and API routes
+  if (
+    path.startsWith("/api/") ||
+    path.startsWith("/_next/") ||
+    path.startsWith("/static/")
+  ) {
+    return NextResponse.next();
+  }
+
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
     {
