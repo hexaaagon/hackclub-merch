@@ -41,7 +41,6 @@ function BreadcrumbLink({
   const Comp = asChild ? Slot : "a";
 
   return (
-    // @ts-expect-error - popover prop type mismatch between a and Slot
     <Comp
       data-slot="breadcrumb-link"
       className={cn("transition-colors hover:text-foreground", className)}

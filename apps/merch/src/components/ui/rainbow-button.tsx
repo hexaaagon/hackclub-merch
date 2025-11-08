@@ -45,7 +45,6 @@ const RainbowButton = React.forwardRef<HTMLButtonElement, RainbowButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
-      // @ts-expect-error - popover prop type mismatch between button and Slot
       <Comp
         data-slot="button"
         className={cn(rainbowButtonVariants({ variant, size, className }))}

@@ -35,7 +35,6 @@ function Badge({
   const Comp = asChild ? Slot : "span";
 
   return (
-    // @ts-expect-error - popover prop type mismatch between span and Slot
     <Comp
       data-slot="badge"
       className={cn(badgeVariants({ variant }), className)}
