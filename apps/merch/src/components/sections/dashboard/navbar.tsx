@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 import {
   type LucideIcon,
@@ -12,6 +13,7 @@ import {
   User2,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { auth, authClient } from "@merch/auth";
 
 const navItems: {
   main: { href: string; title: string }[];
@@ -40,6 +42,10 @@ export default function Navbar({
 }) {
   const [isMounted, setIsMounted] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
+
+  const session = useSWR("auth", async () =>
+    authClient.getSession().then((res) => res.data),
+  );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
