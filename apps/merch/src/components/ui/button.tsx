@@ -49,6 +49,7 @@ function Button({
   const Comp = asChild ? Slot : "button";
 
   return (
+    // @ts-expect-error - popover prop type mismatch between button and Slot
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}

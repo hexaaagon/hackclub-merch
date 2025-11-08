@@ -6,16 +6,12 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./*": {
-      "types": [
-        "./*",
-        "./*/index.ts"
-      ],
-      "default": [
-        "./*",
-        "./*/index.ts"
-      ]
-    }
+    "./frames": "./frames.ts",
+    "./frames/*": "./frames/*.ts",
+    "./global": "./global/index.ts",
+    "./global/*": "./global/*.ts",
+    "./permission": "./permission.ts",
+    "./permission/*": "./permission/*.ts"
   },
   "dependencies": {
     "@merch/types": "workspace:*"
