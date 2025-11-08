@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/sections/marketing/navbar";
 import Footer from "@/components/footer";
 
 export default function RootTemplate({

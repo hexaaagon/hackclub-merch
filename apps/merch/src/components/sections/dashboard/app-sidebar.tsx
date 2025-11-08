@@ -23,7 +23,9 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 // This is sample data.
 const data = {
@@ -146,7 +148,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <Separator orientation="horizontal" />
+        <SidebarTrigger />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
