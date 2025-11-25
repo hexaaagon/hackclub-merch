@@ -14,7 +14,8 @@ export const auth = betterAuth({
     slack: {
       clientId: process.env.SLACK_CLIENT_ID,
       clientSecret: process.env.SLACK_CLIENT_SECRET,
-      team: "T0266FRGM",
+      // disabled bc hackclub migrating to slack grid
+      // team: "T0266FRGM",
     },
   },
   plugins: [nextCookies()],
