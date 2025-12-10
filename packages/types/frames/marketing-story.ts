@@ -17,4 +17,12 @@ export interface FrameManifest {
 
 export interface VideoScrollAnimationProps {
   className?: string;
+  /**
+   * Speed multiplier for the scroll animation.
+   * - 0.1: slowest (requires 10x more scroll)
+   * - 1.0: default speed
+   * - 2.0: fastest (requires 50% less scroll)
+   * @default 1.0
+   */
+  speed?: number;
 }

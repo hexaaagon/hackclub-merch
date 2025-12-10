@@ -131,7 +131,10 @@ class FrameCacheDB {
 
 const frameDB = new FrameCacheDB();
 
-export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
+export function VideoScrollAnimation({
+  className,
+  speed = 1.0,
+}: VideoScrollAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -623,11 +626,15 @@ export function VideoScrollAnimation({ className }: VideoScrollAnimationProps) {
       // Reset init flag on cleanup
       initStartedRef.current = false;
     };
-  }, [loadingState.stage]);
+  }, [loadingState.stage, speed]);
 
-  // Calculate scroll height based on frame count
+  // Calculate scroll height based on frame count and speed
   // Using 1.5vh per frame to prevent gap: 103 frames * 1.5vh = 154.5vh
-  const scrollHeight = manifest ? `${manifest.frameCount * 1.5}vh` : "150vh";
+  // Speed affects the scroll height: lower speed = more scroll needed
+  // Clamp speed between 0.1 and 2 for safety
+  const clampedSpeed = Math.max(0.1, Math.min(2, speed));
+  const baseHeight = manifest ? manifest.frameCount * 1.5 : 150;
+  const scrollHeight = `${baseHeight / clampedSpeed}vh`;
 
   return (
     <div

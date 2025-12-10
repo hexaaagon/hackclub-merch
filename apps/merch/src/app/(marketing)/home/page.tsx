@@ -55,7 +55,7 @@ export default function HomePage() {
       </section>
 
       {/* Video Scroll Animation Section */}
-      <VideoScrollAnimation className="relative" />
+      <VideoScrollAnimation className="relative" speed={0.2} />
 
       {/* Black section for video end transition */}
       <section className="-mt-[2vh] relative flex flex-col justify-center space-y-8 bg-inner pt-[10vh] pb-[20vh] text-inner-foreground">
