@@ -21,5 +21,4 @@ export const auth = betterAuth({
   plugins: [nextCookies()],
 });
 
-export { authClient } from "./client";
 export * from "better-auth";

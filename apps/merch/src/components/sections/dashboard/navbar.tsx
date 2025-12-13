@@ -13,7 +13,7 @@ import {
   User2,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { auth, authClient } from "@merch/auth";
+import { authClient } from "@merch/auth/client";
 
 const navItems: {
   main: { href: string; title: string }[];

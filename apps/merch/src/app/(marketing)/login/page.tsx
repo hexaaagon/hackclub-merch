@@ -1,5 +1,5 @@
 "use client";
-import { authClient } from "@merch/auth";
+import { authClient } from "@merch/auth/client";
 
 import { SiSlack } from "@icons-pack/react-simple-icons";
 import { Sparkles } from "lucide-react";
